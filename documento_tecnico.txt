@@ -10,10 +10,6 @@ HO USATO
 - React per fare il sito (è quello che abbiamo studiato a lezione)
 - Bootstrap per lo stile dei bottoni e del form (preso dal template)
 - Spring Boot per il backend (sono partito dal semilavorato fornito)
-- H2 come database per salvare le proposte 
-  (è un database leggero che si avvia insieme al server, 
-  senza dover installare programmi extra. 
-  Ho scelto questo perchè è più semplice da configurare)
 
 
 FRONTEND
@@ -37,15 +33,11 @@ BACKEND
 
 Sono partito dal semilavorato e ho fatto queste modifiche:
 
-- Ho attivato le dipendenze per il database nel pom.xml
-- Ho aggiunto H2 come database (salva i dati in un file locale)
-- Ho aggiunto le annotazioni alla classe Submission per collegarla al database
-- Ho creato il Repository per poter salvare e leggere i dati
-- Ho completato il Service che prima non faceva nulla
-- Ho completato il Controller per salvare davvero i dati nel database
-- Ho aggiunto la stampa dei dati nella console del server
+- Ho aggiunto @CrossOrigin al Controller per permettere le chiamate dal frontend
+- Ho aggiunto @RequestBody al metodo POST per ricevere il JSON dal frontend
+- Ho aggiunto la stampa di tutti i dati nella console del server
 
-Quando arriva una proposta il server la stampa nella console e la salva nel database.
+Quando arriva una proposta il server la stampa nella console.
 
 
 COME FAR FUNZIONARE IL PROGETTO
@@ -54,21 +46,14 @@ COME FAR FUNZIONARE IL PROGETTO
    cd backend
    mvn spring-boot:run
 
-2. Aprire il browser su http://localhost:8080
+2. Avviare il frontend:
+   cd frontend
+   pnpm dev
 
-3. Compilare il form e cliccare Invia
+3. Aprire il browser su http://localhost:5173
 
-4. Controllare che esce il messaggio di conferma
+4. Compilare il form e cliccare Invia
 
-5. Controllare nella console del server che i dati vengono stampati
+5. Controllare che esce il messaggio di conferma
 
-
-COME VEDERE I DATI NEL DATABASE
-
-1. Aprire http://localhost:8080/h2
-2. Mettere come JDBC URL: jdbc:h2:file:./greentech_data
-3. User: sa
-4. Password: lasciare vuoto
-5. Cliccare Connect
-6. Scrivere: SELECT * FROM SUBMISSIONS;
-7. Cliccare Run per vedere i dati salvati
+6. Controllare nella console del server che i dati vengono stampati
