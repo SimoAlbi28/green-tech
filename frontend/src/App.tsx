@@ -76,14 +76,14 @@ function App() {
 
   // qui ritorno l'HTML della pagina
   return (
-    <div>
+    <div style={{backgroundColor: '#e8f5e9'}}>
 
       {/* SEZIONE HERO - è la parte verde in alto con il titolo e il bottone */}
-      <div style={{backgroundImage: 'url(/sfondo2.png), url(/sfondo1.png)', backgroundSize: '33% 100%, 34% 100%', backgroundPosition: 'left center, center center', backgroundRepeat: 'no-repeat, no-repeat', color: 'black', padding: '80px 20px', textAlign: 'center'}}>
-        <h1>GreenTech</h1>
-        <p>Proponi la tua idea green per un futuro sostenibile!</p>
+      <div style={{backgroundImage: 'url(/sfondo2.png), url(/sfondo1.png), url(/sfondo3.jpg)', backgroundSize: '33% 100%, 34% 100%, 33% 100%', backgroundPosition: 'left center, center center, right center', backgroundRepeat: 'no-repeat, no-repeat, no-repeat', color: 'black', padding: '80px 20px', textAlign: 'center'}}>
+        <h1 style={{textShadow: '2px 2px 4px white, -1px -1px 3px white'}}>GreenTech</h1>
+        <p style={{textShadow: '2px 2px 4px white, -1px -1px 3px white', fontWeight: 'bold'}}>Proponi la tua idea green per un futuro sostenibile!</p>
         {/* questo bottone porta l'utente alla sezione del form */}
-        <a href="#registrazione" className="btn btn-warning mt-3">Partecipa</a>
+        <a href="#registrazione" className="btn btn-warning mt-3" style={{fontSize: '1.2rem', padding: '10px 30px', boxShadow: '2px 2px 8px rgba(0,0,0,0.5)', fontWeight: 'bold'}}>Partecipa</a>
       </div>
 
       {/* container di bootstrap per centrare tutto */}

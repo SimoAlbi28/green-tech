@@ -1,5 +1,4 @@
 DOCUMENTO TECNICO
-==================
 
 Progetto: Portale GreenTech
 Modalità: Caso C (ho usato il template fornito e l'ho integrato in React)
@@ -30,8 +29,6 @@ I dati inviati si vedono nella console del browser e in quella del server.
 
 
 BACKEND
-
-Sono partito dal semilavorato e ho fatto queste modifiche:
 
 - Ho aggiunto @CrossOrigin al Controller per permettere le chiamate dal frontend
 - Ho aggiunto @RequestBody al metodo POST per ricevere il JSON dal frontend
