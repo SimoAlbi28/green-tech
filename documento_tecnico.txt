@@ -1,72 +1,74 @@
-DOCUMENTO TECNICO - Analisi Progettuale
-=========================================
+DOCUMENTO TECNICO
+==================
 
-Progetto: Portale GreenTech per la raccolta di proposte green dalle scuole
-Modalità scelta: Caso C (template fornito + integrazione React)
-
-
-SCELTE TECNOLOGICHE
---------------------
-
-Frontend: React con Vite e TypeScript
-Ho scelto React perchè è il framework che abbiamo studiato durante il corso.
-Vite lo uso come bundler perchè è veloce da configurare.
-Ho usato il template Bootstrap fornito (caso C) per avere uno stile base senza doverlo fare da zero.
-
-Backend: Spring Boot (semilavorato fornito)
-Sono partito dal progetto semilavorato GreenTech_Backend fornito con la traccia.
-Ho completato le parti mancanti: integrazione con JPA e MySQL per salvare i dati nel database.
-
-Database: MySQL
-Ho creato un database chiamato greentech_db dove vengono salvate le registrazioni.
+Progetto: Portale GreenTech
+Modalità: Caso C (ho usato il template fornito e l'ho integrato in React)
 
 
-MODIFICHE AL BACKEND
----------------------
+HO USATO
 
-1. Nel pom.xml ho scommentato le dipendenze per Spring Data JPA e MySQL Connector
-2. Ho trasformato la classe Submission in una entità JPA aggiungendo le annotazioni @Entity, @Table, @Id, @Column
-3. Ho creato il SubmissionRepository che estende JpaRepository
-4. Ho completato il SubmissionService che prima restituiva null, ora salva e legge dal database
-5. Ho completato il SubmissionController per usare il service e salvare nel DB
-6. Ho aggiunto un System.out.println nel controller per stampare i dati ricevuti nella console
-7. Ho configurato application.properties con i dati di connessione a MySQL
-
-
-STRUTTURA DELLA PAGINA FRONTEND
----------------------------------
-
-Ho messo tutte le sezioni richieste dalla traccia in un unico componente App:
-
-1. HERO: sezione verde con titolo e bottone "Partecipa" che porta al form
-2. MISSIONE E VISIONE: descrizione della campagna
-3. TECNOLOGIE VERDI: tecnologie sostenibili promosse
-4. TESTIMONIANZE: citazioni di professori
-5. PREMI: i tre premi per i vincitori
-6. FORM DI REGISTRAZIONE: modulo con tutti gli 8 campi richiesti dalla traccia
-7. LISTA PROPOSTE: proposte caricate dal database tramite chiamata GET al backend
-8. FOOTER
+- React per fare il sito (è quello che abbiamo studiato a lezione)
+- Bootstrap per lo stile dei bottoni e del form (preso dal template)
+- Spring Boot per il backend (sono partito dal semilavorato fornito)
+- H2 come database per salvare le proposte 
+  (è un database leggero che si avvia insieme al server, 
+  senza dover installare programmi extra. 
+  Ho scelto questo perchè è più semplice da configurare)
 
 
-INTEGRAZIONE FRONTEND - BACKEND
-----------------------------------
+FRONTEND
 
-Il form invia i dati al backend tramite fetch POST all'endpoint /api/sumbmissions/.
-I dati vengono mandati in formato JSON.
-Quando il server risponde con successo viene mostrato un alert e il form si resetta.
-Le proposte vengono caricate dal backend con una chiamata GET allo stesso endpoint.
+Ho creato una pagina con queste sezioni:
+- Hero verde con titolo e bottone "Partecipa"
+- Missione e Visione
+- Tecnologie Verdi
+- Testimonianze
+- Premi
+- Form di registrazione con tutti i campi richiesti
+- Contatore delle proposte inviate
+- Footer
 
-Il frontend buildato viene copiato nella cartella static del backend Spring Boot,
-cosi tutto viene servito sulla stessa porta 8080.
+Il form manda i dati al backend quando si clicca "Invia".
+Se va tutto bene esce un messaggio di conferma e il form si svuota.
+I dati inviati si vedono nella console del browser e in quella del server.
 
 
-COME TESTARE IL PROGETTO
---------------------------
+BACKEND
 
-1. Assicurarsi che MySQL sia attivo e che esista il database greentech_db
-2. Avviare il backend: cd backend && mvn spring-boot:run (richiede Java 21)
-3. Aprire il browser su http://localhost:8080
-4. Compilare il form e inviare una registrazione
-5. Verificare che compare l'alert di conferma
-6. Verificare che la proposta compare nella lista in fondo alla pagina
-7. Verificare nella console del backend che i dati vengono stampati
+Sono partito dal semilavorato e ho fatto queste modifiche:
+
+- Ho attivato le dipendenze per il database nel pom.xml
+- Ho aggiunto H2 come database (salva i dati in un file locale)
+- Ho aggiunto le annotazioni alla classe Submission per collegarla al database
+- Ho creato il Repository per poter salvare e leggere i dati
+- Ho completato il Service che prima non faceva nulla
+- Ho completato il Controller per salvare davvero i dati nel database
+- Ho aggiunto la stampa dei dati nella console del server
+
+Quando arriva una proposta il server la stampa nella console e la salva nel database.
+
+
+COME FAR FUNZIONARE IL PROGETTO
+
+1. Avviare il backend:
+   cd backend
+   mvn spring-boot:run
+
+2. Aprire il browser su http://localhost:8080
+
+3. Compilare il form e cliccare Invia
+
+4. Controllare che esce il messaggio di conferma
+
+5. Controllare nella console del server che i dati vengono stampati
+
+
+COME VEDERE I DATI NEL DATABASE
+
+1. Aprire http://localhost:8080/h2
+2. Mettere come JDBC URL: jdbc:h2:file:./greentech_data
+3. User: sa
+4. Password: lasciare vuoto
+5. Cliccare Connect
+6. Scrivere: SELECT * FROM SUBMISSIONS;
+7. Cliccare Run per vedere i dati salvati
