@@ -164,16 +164,9 @@ function App() {
         </form>
         <hr />
 
-        {/* SEZIONE LISTA PROPOSTE - mostro le proposte che arrivano dal backend */}
+        {/* SEZIONE PROPOSTE - mostro solo il conteggio */}
         <h2>Proposte</h2>
-        {/* se non ci sono proposte mostro un messaggio */}
-        {proposte.length === 0 && <p>Nessuna proposta ancora.</p>}
-        {/* mappo l'array delle proposte per mostrarle una per una */}
-        {proposte.map((p, i) => (
-          <div key={i} className="mb-2">
-            <b>{p.projectName}</b> - {p.description} <i>({p.school})</i>
-          </div>
-        ))}
+        <p>Proposte inviate finora: <b>{proposte.length}</b></p>
       </div>
 
       {/* FOOTER */}
