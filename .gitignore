@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# H2 Database
+*.mv.db
+*.trace.db
