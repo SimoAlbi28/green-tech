@@ -1,47 +1,81 @@
-import { useState } from 'react'
-import './App.css'
+// importo useState per gestire i campi del form e useEffect per caricare i dati all'avvio
+import { useState, useEffect } from 'react'
 
-// componente principale
+// questo è il componente principale della mia pagina
 function App() {
 
-  // stati per il form
-  const [nomeScuola, setNomeScuola] = useState('')
-  const [grado, setGrado] = useState('')
-  const [provincia, setProvincia] = useState('')
-  const [classe, setClasse] = useState('')
-  const [nomeDocente, setNomeDocente] = useState('')
+  // qui creo una variabile di stato per ogni campo del form
+  // useState mi serve per tenere traccia di cosa scrive l'utente negli input
+  const [school, setSchool] = useState('')
+  const [level, setLevel] = useState('')
+  const [province, setProvince] = useState('')
+  const [className, setClassName] = useState('')
+  const [contactPerson, setContactPerson] = useState('')
   const [email, setEmail] = useState('')
-  const [nomeProgetto, setNomeProgetto] = useState('')
-  const [descrizione, setDescrizione] = useState('')
+  const [projectName, setProjectName] = useState('')
+  const [description, setDescription] = useState('')
 
-  // funzione per mandare i dati al backend
+  // qui salvo le proposte che mi arrivano dal backend
+  const [proposte, setProposte] = useState<{projectName: string, school: string, description: string}[]>([])
+
+  // useEffect si esegue quando la pagina si carica per la prima volta
+  // lo uso per fare una chiamata GET al backend e prendere le proposte già salvate
+  useEffect(() => {
+    fetch('/api/sumbmissions/')
+      .then(res => res.json())
+      .then(data => setProposte(data))
+      .catch(() => console.log('backend non raggiungibile'))
+  }, [])
+
+  // questa funzione viene chiamata quando l'utente clicca "Invia"
   const handleSubmit = (e: React.FormEvent) => {
+    // preventDefault serve per evitare che la pagina si ricarichi quando invio il form
     e.preventDefault()
 
-    // controllo campi
-    if (!nomeScuola || !grado || !provincia || !classe || !nomeDocente || !email || !nomeProgetto || !descrizione) {
+    // controllo che tutti i campi siano compilati
+    if (!school || !level || !province || !className || !contactPerson || !email || !projectName || !description) {
       alert('Compila tutti i campi!')
       return
     }
 
-    // mando i dati
-    fetch('/api/registrazioni', {
+    // creo l'oggetto con i dati da mandare
+    const dati = {
+      projectName,
+      school,
+      contactPerson,
+      email,
+      province,
+      className,
+      description,
+      level: level === 'primo' ? 'FIRST' : 'SECOND'
+    }
+
+    // stampo i dati nella console del browser prima di inviarli
+    console.log('=== DATI INVIATI AL BACKEND ===')
+    console.log('Scuola:', school)
+    console.log('Grado:', level)
+    console.log('Provincia:', province)
+    console.log('Classe:', className)
+    console.log('Docente:', contactPerson)
+    console.log('Email:', email)
+    console.log('Progetto:', projectName)
+    console.log('Descrizione:', description)
+    console.log('===============================')
+
+    // mando i dati al backend con una chiamata POST
+    fetch('/api/sumbmissions/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nomeScuola,
-        gradoScuola: grado,
-        provincia,
-        classe,
-        nomeDocente,
-        email,
-        nomeProgetto,
-        descrizione
-      })
+      body: JSON.stringify(dati)
     })
       .then(res => {
         if (res.ok) {
-          alert('Registrazione inviata!')
+          // se è andato bene mostro un messaggio e pulisco il form
+          alert('Registrazione inviata con successo!')
+          setSchool(''); setLevel(''); setProvince(''); setClassName('')
+          setContactPerson(''); setEmail(''); setProjectName(''); setDescription('')
+          // ricarico le proposte dal backend per aggiornare la lista
+          fetch('/api/sumbmissions/').then(r => r.json()).then(d => setProposte(d))
         } else {
           alert('Errore nell\'invio')
         }
@@ -49,85 +83,106 @@ function App() {
       .catch(() => alert('Errore di connessione al server'))
   }
 
-  // proposte di esempio
-  const proposte = [
-    { titolo: "Orto scolastico smart", descrizione: "Un orto gestito con sensori IoT.", scuola: "Liceo Volta - Milano" },
-    { titolo: "Raccolta differenziata digitale", descrizione: "App per differenziare i rifiuti.", scuola: "ITIS Galilei - Roma" },
-    { titolo: "Pannelli solari a scuola", descrizione: "Installare pannelli solari sul tetto.", scuola: "IC Manzoni - Torino" }
-  ]
-
+  // qui ritorno l'HTML della pagina
   return (
     <div>
 
-      {/* HERO */}
-      <div className="hero">
+      {/* SEZIONE HERO - è la parte verde in alto con il titolo e il bottone */}
+      <div style={{background: '#2d6a4f', color: 'white', padding: '50px 20px', textAlign: 'center'}}>
         <h1>GreenTech</h1>
         <p>Proponi la tua idea green per un futuro sostenibile!</p>
-        <a href="#registrazione" className="bottone">Partecipa</a>
+        {/* questo bottone porta l'utente alla sezione del form */}
+        <a href="#registrazione" className="btn btn-warning mt-3">Partecipa</a>
       </div>
 
-      {/* MISSIONE */}
-      <div className="sezione">
+      {/* container di bootstrap per centrare tutto */}
+      <div className="container mt-4 text-center">
+
+        {/* SEZIONE MISSIONE E VISIONE */}
         <h2>Missione e Visione</h2>
         <p>GreenTech vuole sensibilizzare gli studenti sulla sostenibilità ambientale raccogliendo idee innovative dalle scuole italiane.</p>
-      </div>
+        <hr />
 
-      {/* TECNOLOGIE VERDI */}
-      <div className="sezione sfondo">
+        {/* SEZIONE TECNOLOGIE VERDI */}
         <h2>Tecnologie Verdi</h2>
         <p>Energia solare, riciclo intelligente e agricoltura urbana sono le tecnologie che promuoviamo nelle scuole.</p>
-      </div>
+        <hr />
 
-      {/* TESTIMONIANZE */}
-      <div className="sezione">
+        {/* SEZIONE TESTIMONIANZE */}
         <h2>Testimonianze</h2>
         <p><i>"Grazie a GreenTech abbiamo installato pannelli solari nella nostra scuola."</i> - Prof. Bianchi</p>
         <p><i>"Il progetto dell'orto ha coinvolto tutti gli studenti."</i> - Prof.ssa Rossi</p>
-      </div>
+        <hr />
 
-      {/* PREMI */}
-      <div className="sezione sfondo">
+        {/* SEZIONE PREMI */}
         <h2>Premi</h2>
         <p>1° premio: borsa di studio da 5000€ | 2° premio: 3000€ | 3° premio: 1500€</p>
-      </div>
+        <hr />
 
-      {/* FORM REGISTRAZIONE */}
-      <div className="sezione" id="registrazione">
-        <h2>Registrati</h2>
-        <form onSubmit={handleSubmit} className="form">
-          <input placeholder="Nome Scuola" value={nomeScuola} onChange={e => setNomeScuola(e.target.value)} />
-          <select value={grado} onChange={e => setGrado(e.target.value)}>
-            <option value="">Grado scuola...</option>
-            <option value="primo">Primo Grado</option>
-            <option value="secondo">Secondo Grado</option>
-          </select>
-          <input placeholder="Provincia" value={provincia} onChange={e => setProvincia(e.target.value)} />
-          <input placeholder="Classe (es. 3A)" value={classe} onChange={e => setClasse(e.target.value)} />
-          <input placeholder="Nome Docente" value={nomeDocente} onChange={e => setNomeDocente(e.target.value)} />
-          <input placeholder="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-          <input placeholder="Nome Progetto" value={nomeProgetto} onChange={e => setNomeProgetto(e.target.value)} />
-          <textarea placeholder="Descrizione progetto..." rows={4} value={descrizione} onChange={e => setDescrizione(e.target.value)} />
-          <button type="submit">Invia</button>
+        {/* SEZIONE FORM DI REGISTRAZIONE */}
+        <h2 id="registrazione">Registra la tua scuola</h2>
+        {/* onSubmit chiama la funzione handleSubmit quando l'utente clicca invia */}
+        <form onSubmit={handleSubmit} className="mb-4 mx-auto text-start" style={{maxWidth: '500px'}}>
+          {/* ogni campo ha un value collegato allo stato e un onChange che aggiorna lo stato */}
+          <div className="mb-2">
+            <label className="form-label">Nome Scuola *</label>
+            <input className="form-control" value={school} onChange={e => setSchool(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Grado *</label>
+            <select className="form-control" value={level} onChange={e => setLevel(e.target.value)}>
+              <option value="">Seleziona...</option>
+              <option value="primo">Primo Grado</option>
+              <option value="secondo">Secondo Grado</option>
+            </select>
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Provincia *</label>
+            <input className="form-control" value={province} onChange={e => setProvince(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Classe *</label>
+            <input className="form-control" value={className} onChange={e => setClassName(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Nome Docente *</label>
+            <input className="form-control" value={contactPerson} onChange={e => setContactPerson(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Email *</label>
+            <input className="form-control" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Nome Progetto *</label>
+            <input className="form-control" value={projectName} onChange={e => setProjectName(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label className="form-label">Descrizione *</label>
+            <textarea className="form-control" rows={4} value={description} onChange={e => setDescription(e.target.value)}></textarea>
+          </div>
+          <button type="submit" className="btn btn-success">Invia</button>
         </form>
-      </div>
+        <hr />
 
-      {/* PROPOSTE */}
-      <div className="sezione sfondo">
+        {/* SEZIONE LISTA PROPOSTE - mostro le proposte che arrivano dal backend */}
         <h2>Proposte</h2>
+        {/* se non ci sono proposte mostro un messaggio */}
+        {proposte.length === 0 && <p>Nessuna proposta ancora.</p>}
+        {/* mappo l'array delle proposte per mostrarle una per una */}
         {proposte.map((p, i) => (
-          <div key={i} className="proposta">
-            <b>{p.titolo}</b> - {p.descrizione} <i>({p.scuola})</i>
+          <div key={i} className="mb-2">
+            <b>{p.projectName}</b> - {p.description} <i>({p.school})</i>
           </div>
         ))}
       </div>
 
       {/* FOOTER */}
-      <div className="footer">
-        <p>© 2024 GreenTech</p>
+      <div style={{background: '#2d6a4f', color: 'white', textAlign: 'center', padding: '15px', marginTop: '30px'}}>
+        <p className="mb-0">© 2024 GreenTech</p>
       </div>
-
     </div>
   )
 }
 
+// esporto il componente per usarlo in main.tsx
 export default App

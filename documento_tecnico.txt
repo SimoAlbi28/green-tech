@@ -2,56 +2,71 @@ DOCUMENTO TECNICO - Analisi Progettuale
 =========================================
 
 Progetto: Portale GreenTech per la raccolta di proposte green dalle scuole
+Modalità scelta: Caso C (template fornito + integrazione React)
 
 
 SCELTE TECNOLOGICHE
 --------------------
 
 Frontend: React con Vite e TypeScript
+Ho scelto React perchè è il framework che abbiamo studiato durante il corso.
+Vite lo uso come bundler perchè è veloce da configurare.
+Ho usato il template Bootstrap fornito (caso C) per avere uno stile base senza doverlo fare da zero.
 
-Ho scelto React perchè è il framework che abbiamo studiato durante il corso e mi trovo bene ad usarlo.
-Vite lo uso come bundler perchè è veloce e semplice da configurare rispetto ad altre alternative.
-TypeScript l'ho tenuto perchè il progetto è stato creato già con TypeScript e aiuta a evitare errori.
+Backend: Spring Boot (semilavorato fornito)
+Sono partito dal progetto semilavorato GreenTech_Backend fornito con la traccia.
+Ho completato le parti mancanti: integrazione con JPA e MySQL per salvare i dati nel database.
 
-CSS: file CSS semplice
-
-Per lo stile ho usato un file CSS normale senza librerie esterne tipo Bootstrap.
-Ho preferito fare così perchè mi sentivo più comodo a scrivere il CSS a mano e le sezioni
-della pagina non erano troppo complicate da richiedere un framework.
+Database: MySQL
+Ho creato un database chiamato greentech_db dove vengono salvate le registrazioni.
 
 
-STRUTTURA DELLA PAGINA
------------------------
+MODIFICHE AL BACKEND
+---------------------
+
+1. Nel pom.xml ho scommentato le dipendenze per Spring Data JPA e MySQL Connector
+2. Ho trasformato la classe Submission in una entità JPA aggiungendo le annotazioni @Entity, @Table, @Id, @Column
+3. Ho creato il SubmissionRepository che estende JpaRepository
+4. Ho completato il SubmissionService che prima restituiva null, ora salva e legge dal database
+5. Ho completato il SubmissionController per usare il service e salvare nel DB
+6. Ho aggiunto un System.out.println nel controller per stampare i dati ricevuti nella console
+7. Ho configurato application.properties con i dati di connessione a MySQL
+
+
+STRUTTURA DELLA PAGINA FRONTEND
+---------------------------------
 
 Ho messo tutte le sezioni richieste dalla traccia in un unico componente App:
 
-1. HERO: una sezione verde in alto con il titolo e un bottone "Partecipa" che porta al form
-2. MISSIONE E VISIONE: un paragrafo che spiega lo scopo della campagna
-3. TECNOLOGIE VERDI: descrizione delle tecnologie sostenibili promosse
-4. TESTIMONIANZE: due citazioni di professori che hanno partecipato
-5. PREMI: i tre premi previsti per i vincitori
-6. FORM DI REGISTRAZIONE: il modulo con tutti i campi richiesti dalla traccia
-7. LISTA PROPOSTE: alcune proposte di esempio con titolo, descrizione e scuola
-8. FOOTER: piè di pagina con il copyright
+1. HERO: sezione verde con titolo e bottone "Partecipa" che porta al form
+2. MISSIONE E VISIONE: descrizione della campagna
+3. TECNOLOGIE VERDI: tecnologie sostenibili promosse
+4. TESTIMONIANZE: citazioni di professori
+5. PREMI: i tre premi per i vincitori
+6. FORM DI REGISTRAZIONE: modulo con tutti gli 8 campi richiesti dalla traccia
+7. LISTA PROPOSTE: proposte caricate dal database tramite chiamata GET al backend
+8. FOOTER
 
 
-INTEGRAZIONE CON IL BACKEND
------------------------------
+INTEGRAZIONE FRONTEND - BACKEND
+----------------------------------
 
-Il form manda i dati al backend Spring Boot usando fetch con metodo POST.
-I dati vengono inviati in formato JSON all'endpoint /api/registrazione.
-Quando il server risponde con successo viene mostrato un alert di conferma,
-se c'è un errore viene mostrato un alert di errore.
+Il form invia i dati al backend tramite fetch POST all'endpoint /api/sumbmissions/.
+I dati vengono mandati in formato JSON.
+Quando il server risponde con successo viene mostrato un alert e il form si resetta.
+Le proposte vengono caricate dal backend con una chiamata GET allo stesso endpoint.
 
-Tutti i campi sono obbligatori e viene fatto un controllo prima di inviare:
-se manca qualche campo esce un alert che dice di compilare tutto.
+Il frontend buildato viene copiato nella cartella static del backend Spring Boot,
+cosi tutto viene servito sulla stessa porta 8080.
 
 
 COME TESTARE IL PROGETTO
 --------------------------
 
-1. Avviare il backend: java -jar GreenTech_Backend.jar
-2. Avviare il frontend: entrare nella cartella del progetto e lanciare "pnpm dev"
-3. Aprire il browser su http://localhost:5173
-4. Navigare la pagina e provare a compilare il form di registrazione
-5. Verificare che dopo l'invio compare l'alert di conferma
+1. Assicurarsi che MySQL sia attivo e che esista il database greentech_db
+2. Avviare il backend: cd backend && mvn spring-boot:run (richiede Java 21)
+3. Aprire il browser su http://localhost:8080
+4. Compilare il form e inviare una registrazione
+5. Verificare che compare l'alert di conferma
+6. Verificare che la proposta compare nella lista in fondo alla pagina
+7. Verificare nella console del backend che i dati vengono stampati

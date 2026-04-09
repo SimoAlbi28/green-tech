@@ -1,16 +1,1 @@
-/* reset base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #fff;
-}
-
-a {
-  color: inherit;
-}
+/* reset minimo, il template ha gia il suo css */
