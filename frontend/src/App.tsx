@@ -79,7 +79,7 @@ function App() {
     <div>
 
       {/* SEZIONE HERO - è la parte verde in alto con il titolo e il bottone */}
-      <div style={{background: '#2d6a4f', color: 'white', padding: '50px 20px', textAlign: 'center'}}>
+      <div style={{backgroundImage: 'url(/sfondo2.png), url(/sfondo1.png)', backgroundSize: '33% 100%, 34% 100%', backgroundPosition: 'left center, center center', backgroundRepeat: 'no-repeat, no-repeat', color: 'black', padding: '80px 20px', textAlign: 'center'}}>
         <h1>GreenTech</h1>
         <p>Proponi la tua idea green per un futuro sostenibile!</p>
         {/* questo bottone porta l'utente alla sezione del form */}

@@ -1,5 +1,4 @@
 /root/esame/green-tech/backend/src/main/java/it/greentech/GreentechApplication.java
 /root/esame/green-tech/backend/src/main/java/it/greentech/controllers/SubmissionController.java
 /root/esame/green-tech/backend/src/main/java/it/greentech/persistence/entities/Submission.java
-/root/esame/green-tech/backend/src/main/java/it/greentech/persistence/repositories/SubmissionRepository.java
 /root/esame/green-tech/backend/src/main/java/it/greentech/services/SubmissionService.java
