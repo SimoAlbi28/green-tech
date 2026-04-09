@@ -1,5 +1,5 @@
 // importo useState per gestire i campi del form e useEffect per caricare i dati all'avvio
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 // questo è il componente principale della mia pagina
 function App() {
@@ -15,17 +15,8 @@ function App() {
   const [projectName, setProjectName] = useState('')
   const [description, setDescription] = useState('')
 
-  // qui salvo le proposte che mi arrivano dal backend
-  const [proposte, setProposte] = useState<{projectName: string, school: string, description: string}[]>([])
-
-  // useEffect si esegue quando la pagina si carica per la prima volta
-  // lo uso per fare una chiamata GET al backend e prendere le proposte già salvate
-  useEffect(() => {
-    fetch('/api/sumbmissions/')
-      .then(res => res.json())
-      .then(data => setProposte(data))
-      .catch(() => console.log('backend non raggiungibile'))
-  }, [])
+  // contatore delle proposte inviate con successo
+  const [contatore, setContatore] = useState(0)
 
   // questa funzione viene chiamata quando l'utente clicca "Invia"
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,8 +65,8 @@ function App() {
           alert('Registrazione inviata con successo!')
           setSchool(''); setLevel(''); setProvince(''); setClassName('')
           setContactPerson(''); setEmail(''); setProjectName(''); setDescription('')
-          // ricarico le proposte dal backend per aggiornare la lista
-          fetch('/api/sumbmissions/').then(r => r.json()).then(d => setProposte(d))
+          // aumento il contatore di 1
+          setContatore(prev => prev + 1)
         } else {
           alert('Errore nell\'invio')
         }
@@ -166,7 +157,7 @@ function App() {
 
         {/* SEZIONE PROPOSTE - mostro solo il conteggio */}
         <h2>Proposte</h2>
-        <p>Proposte inviate finora: <b>{proposte.length}</b></p>
+        <p>Proposte inviate finora: <b>{contatore}</b></p>
       </div>
 
       {/* FOOTER */}
