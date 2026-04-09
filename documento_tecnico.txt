@@ -1,56 +1,113 @@
 DOCUMENTO TECNICO
 
-Progetto: Portale GreenTech
-Modalità: Caso C (ho usato il template fornito e l'ho integrato in React)
+
+1. INTRODUZIONE PROGETTO
+
+Il progetto GreenTech è un portale web pensato per raccogliere proposte di progetti
+green dalle scuole italiane. L'obiettivo è sensibilizzare gli studenti sulla
+sostenibilità ambientale, permettendo alle scuole di primo e secondo grado di
+inviare le proprie idee innovative attraverso un form online.
+Ho scelto la modalità Caso C, partendo dal template HTML fornito e integrandolo
+in un'applicazione React.
 
 
-HO USATO
+2. PROTOTIPAZIONE
 
-- React per fare il sito (è quello che abbiamo studiato a lezione)
-- Bootstrap per lo stile dei bottoni e del form (preso dal template)
-- Spring Boot per il backend (sono partito dal semilavorato fornito)
-
-
-FRONTEND
-
-Ho creato una pagina con queste sezioni:
-- Hero verde con titolo e bottone "Partecipa"
-- Missione e Visione
-- Tecnologie Verdi
-- Testimonianze
-- Premi
-- Form di registrazione con tutti i campi richiesti
+Ho progettato una single page application con le seguenti sezioni:
+- Hero con immagini di sfondo a tema green e bottone "Partecipa"
+- Missione e Visione del progetto
+- Tecnologie Verdi promosse
+- Testimonianze di docenti
+- Premi in palio
+- Form di registrazione con tutti i campi richiesti dalla traccia
 - Contatore delle proposte inviate
 - Footer
 
-Il form manda i dati al backend quando si clicca "Invia".
-Se va tutto bene esce un messaggio di conferma e il form si svuota.
-I dati inviati si vedono nella console del browser e in quella del server.
+Il flusso è semplice: l'utente compila il form, clicca Invia, i dati vengono
+mandati al backend e stampati nella console del server. Un messaggio di conferma
+appare a schermo e il contatore si aggiorna.
 
 
-BACKEND
+3. FRONTEND
 
+Tecnologie utilizzate:
+- React (con TypeScript): l'ho scelto perché è quello che abbiamo studiato a lezione
+  e mi permette di gestire lo stato del form in modo semplice con gli hook (useState)
+- Vite: come build tool perché è veloce e si configura facilmente con React
+- Bootstrap: per lo stile dei bottoni, del form e del layout responsive,
+  così non ho dovuto scrivere tutto il CSS da zero
+
+Il frontend è una single page con un componente App.tsx che contiene tutta la logica.
+Quando l'utente compila il form e clicca "Invia":
+1. I dati vengono validati (tutti i campi sono obbligatori)
+2. I dati vengono stampati nella console del browser
+3. Viene fatta una chiamata POST al backend in formato JSON
+4. Se la risposta è positiva, il form si svuota e il contatore sale di 1
+
+
+4. BACKEND
+
+Tecnologie utilizzate:
+- Spring Boot (Java): sono partito dal semilavorato fornito che aveva già la
+  struttura base con Controller, Service e Entity
+- Maven: come build tool per gestire le dipendenze
+
+Il backend espone due endpoint REST:
+- POST /api/sumbmissions/ : riceve i dati dal form in formato JSON e li stampa
+  nella console del server
+- GET /api/sumbmissions/ : restituisce una lista di proposte di esempio
+
+Modifiche fatte rispetto al semilavorato:
 - Ho aggiunto @CrossOrigin al Controller per permettere le chiamate dal frontend
-- Ho aggiunto @RequestBody al metodo POST per ricevere il JSON dal frontend
-- Ho aggiunto la stampa di tutti i dati nella console del server
+- Ho aggiunto @RequestBody al metodo POST per ricevere il JSON
+- Ho aggiunto la stampa di tutti i dati ricevuti nella console del server
+  (nome scuola, grado, provincia, classe, docente, email, progetto, descrizione)
 
-Quando arriva una proposta il server la stampa nella console.
+Quando arriva una proposta, il server stampa tutti i dati nella console in maniera
+chiaro e leggibile.
 
 
-COME FAR FUNZIONARE IL PROGETTO
+5. CONSIDERAZIONI FINALI
 
-1. Avviare il backend:
-   cd backend
-   mvn spring-boot:run
+Visto il poco tempo a disposizione ho dovuto focalizzarmi sulle funzionalità
+principali richieste dalla traccia:
+- La creazione del portale con tutte le sezioni richieste
+- Il form di registrazione funzionante con tutti i campi
+- Il collegamento frontend-backend con stampa dei dati nella console
 
-2. Avviare il frontend:
-   cd frontend
-   pnpm dev
+Se avessi avuto più tempo avrei prestato più attenzione a:
+- Il salvataggio dei dati in un database (H2 o altro) per renderli persistenti
+- La validazione dei campi più accurata (formato email, lunghezza descrizione)
+- Un design (CSS) più curato e responsive per i dispositivi mobile con anche qualche effetto in piu
+- La gestione degli errori più dettagliata
 
-3. Aprire il browser su http://localhost:5173
 
-4. Compilare il form e cliccare Invia
+6. ESECUZIONE DEL CODICE
 
-5. Controllare che esce il messaggio di conferma
+Prerequisiti:
+- Node.js (per il frontend)
+- Java 21 (per il backend)
+- Maven (per compilare il backend)
+- pnpm (per installare le dipendenze frontend)
 
-6. Controllare nella console del server che i dati vengono stampati
+Librerie/dipendenze installate:
+- Frontend: react, react-dom, typescript, vite, bootstrap
+- Backend: spring-boot-starter-web, lombok, springdoc-openapi, spring-boot-devtools
+
+Comandi per avviare il progetto:
+
+  Backend:
+    cd backend
+    mvn spring-boot:run
+
+  Frontend (sviluppo):
+    cd frontend
+    pnpm install
+    pnpm dev
+
+  Frontend (build produzione):
+    cd frontend
+    pnpm build
+
+Il backend si avvia sulla porta 8080 e serve anche i file statici del frontend.
+Aprire il browser su http://localhost:8080 per usare l'applicazione.
