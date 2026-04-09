@@ -1,0 +1,6 @@
+/root/esame/green-tech/backend/src/main/java/com/example/backend/model/Registrazione.java
+/root/esame/green-tech/backend/src/main/java/com/example/backend/CorsConfig.java
+/root/esame/green-tech/backend/src/main/java/com/example/backend/repository/RegistrazioneRepository.java
+/root/esame/green-tech/backend/src/main/java/com/example/backend/controller/RegistrazioneController.java
+/root/esame/green-tech/backend/src/main/java/com/example/backend/service/RegistrazioneService.java
+/root/esame/green-tech/backend/src/main/java/com/example/backend/BackendApplication.java
